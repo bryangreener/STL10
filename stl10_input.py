@@ -162,7 +162,7 @@ def save_images(images, labels):
     
 if __name__ == "__main__":
     # download data if needed
-    #download_and_extract()
+    download_and_extract()
 
     # test to check if the image is read correctly
     with open(DATA_PATH) as f:
