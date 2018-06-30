@@ -1,3 +1,4 @@
+#https://github.com/mttk/STL10/blob/master/stl10_input.py
 from __future__ import print_function
 
 import sys
@@ -25,6 +26,9 @@ DATA_DIR = './data'
 
 # url of the binary data
 DATA_URL = 'http://ai.stanford.edu/~acoates/stl10/stl10_binary.tar.gz'
+
+# Path to binary train file with unlabeled image data
+UNLABELED_DATA_PATH = './data/stl10_binary/unlabeled_X.bin'
 
 # path to the binary train file with image data
 DATA_PATH = './data/stl10_binary/train_X.bin'
@@ -101,12 +105,13 @@ def plot_image(image):
 def save_image(image, name):
     for spine in plt.gca().spines.values():
         spine.set_visible(False)
-
+    fig = plt.figure()
     plt.tick_params(top=False, bottom=False, left=False, right=False, labelleft=False, labelbottom=True)
     plt.axis('off')
     
     plt.imshow(image)
     plt.savefig(name, bbox_inches='tight', dpi=96)
+    plt.close(fig) #prevent slowdowns
 
 def download_and_extract():
     """
@@ -130,22 +135,35 @@ def download_and_extract():
 def save_images(images, labels):
     print("Saving images to disk")
     i = 0
-    for image in images:
-        label = labels[i]
-        directory = './img/' + str(label) + '/'
-        try:
-            os.makedirs(directory, exist_ok=True)
-        except OSError as exc:
-            if exc.errno == errno.EEXIST:
-                pass
-        filename = directory + str(i)
-        print(filename)
-        save_image(image, filename)
-        i = i+1
+    if labels:
+        for image in images:
+            label = labels[i]
+            directory = './img/' + str(label) + '/'
+            try:
+                os.makedirs(directory, exist_ok=True)
+            except OSError as exc:
+                if exc.errno == errno.EEXIST:
+                    pass
+            filename = directory + str(i)
+            print(filename)
+            save_image(image, filename)
+            i = i+1
+    else:
+        for image in images:
+            directory='./unlabeled_img/'
+            try:
+                os.makedirs(directory, exist_ok=True)
+            except OSError as exc:
+                if exc.errno == errno.EEXIST:
+                    pass
+            filename = directory + str(i)
+            print(filename)
+            save_image(image, filename)
+            i = i+1
     
 if __name__ == "__main__":
     # download data if needed
-    download_and_extract()
+    #download_and_extract()
 
     # test to check if the image is read correctly
     with open(DATA_PATH) as f:
@@ -153,11 +171,15 @@ if __name__ == "__main__":
         plot_image(image)
 
     # test to check if the whole dataset is read correctly
-    images = read_all_images(DATA_PATH)
+    images = read_all_images(UNLABELED_DATA_PATH)
     print(images.shape)
-
+    
+    # Comment these lines out if saving unlabeled images
     labels = read_labels(LABEL_PATH)
     print(labels.shape)
-
+    
+    # Use this line if reading unlabeled images
+    #labels = None
+    
     # save images to disk
     save_images(images, labels)
