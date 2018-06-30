@@ -170,15 +170,16 @@ if __name__ == "__main__":
         plot_image(image)
 
     # test to check if the whole dataset is read correctly
-    images = read_all_images(UNLABELED_DATA_PATH)
+    images = read_all_images(DATA_PATH)
     print(images.shape)
+    unlabeled_images = read_all_images(UNLABELED_DATA_PATH)
+    print(unlabeled_images.shape)
     
-    # Comment these lines out if saving unlabeled images
     labels = read_labels(LABEL_PATH)
     print(labels.shape)
     
-    # Use this line if reading unlabeled images
-    #labels = None
-    
     # save images to disk
     save_images(images, labels)
+    
+    # save unlabeled images to disk
+    save_images(unlabeled_images, None)
