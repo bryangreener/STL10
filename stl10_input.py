@@ -1,4 +1,3 @@
-#https://github.com/mttk/STL10/blob/master/stl10_input.py
 from __future__ import print_function
 
 import sys
