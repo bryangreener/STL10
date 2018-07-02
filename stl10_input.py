@@ -134,31 +134,21 @@ def download_and_extract():
 def save_images(images, labels):
     print("Saving images to disk")
     i = 0
-    if labels:
-        for image in images:
+    for image in images:
+        if labels:
             label = labels[i]
             directory = './img/' + str(label) + '/'
-            try:
-                os.makedirs(directory, exist_ok=True)
-            except OSError as exc:
-                if exc.errno == errno.EEXIST:
-                    pass
-            filename = directory + str(i)
-            print(filename)
-            save_image(image, filename)
-            i = i+1
-    else:
-        for image in images:
+        else:
             directory='./unlabeled_img/'
-            try:
-                os.makedirs(directory, exist_ok=True)
-            except OSError as exc:
-                if exc.errno == errno.EEXIST:
-                    pass
-            filename = directory + str(i)
-            print(filename)
-            save_image(image, filename)
-            i = i+1
+        try:
+            os.makedirs(directory, exist_ok=True)
+        except OSError as exc:
+            if exc.errno == errno.EEXIST:
+                pass
+        filename = directory + str(i)
+        print(filename)
+        save_image(image, filename)
+        i = i+1
     
 if __name__ == "__main__":
     # download data if needed
