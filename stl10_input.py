@@ -131,11 +131,11 @@ def download_and_extract():
         print('Downloaded', filename)
         tarfile.open(filepath, 'r:gz').extractall(dest_directory)
 
-def save_images(images, labels):
+def save_images(images, labels=None):
     print("Saving images to disk")
     i = 0
     for image in images:
-        if labels:
+        if labels is not None:
             label = labels[i]
             directory = './img/' + str(label) + '/'
         else:
@@ -161,9 +161,10 @@ if __name__ == "__main__":
 
     # test to check if the whole dataset is read correctly
     images = read_all_images(DATA_PATH)
-    print(images.shape)
+    print("Labeled Images:   ", images.shape)
+    
     unlabeled_images = read_all_images(UNLABELED_DATA_PATH)
-    print(unlabeled_images.shape)
+    print("Unlabeled Images: ", unlabeled_images.shape)
     
     labels = read_labels(LABEL_PATH)
     print(labels.shape)
@@ -172,4 +173,4 @@ if __name__ == "__main__":
     save_images(images, labels)
     
     # save unlabeled images to disk
-    save_images(unlabeled_images, None)
+    save_images(unlabeled_images)
